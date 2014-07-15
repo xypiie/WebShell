@@ -17,7 +17,7 @@ padding:0;
 minimum-height:264px;
 font:10px Andale Mono, monospace;
 white-space:pre;
-background:#000 url('background.jpg');
+background:#000;
 }
 
 span.ul { text-decoration: underline; }

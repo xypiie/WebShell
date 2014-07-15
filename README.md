@@ -48,11 +48,6 @@ browser:
 
 	https://127.0.0.1:8022
 
-You can change WebShell's background by overwriting the
-background.jpg file.  You can also change the display colors in
-webshell.css.  Restart the server afterwards to make your changes
-effective.
-
 Voila, enjoy WebShell.
 
 Features
