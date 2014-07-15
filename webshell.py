@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python2
+# vim: tabstop=8 noexpandtab shiftwidth=8 softtabstop=8 list
 
 """ WebShell Server """
 """ Released under the GPL 2.0 by Marc S. Ressl """
@@ -14,7 +15,7 @@ from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 
 try:
 	openssl_installed = False
-	from OpenSSL import SSL
+	import ssl
 	openssl_installed = True
 except ImportError:
 	pass
@@ -594,7 +595,7 @@ class Terminal:
 	def csi_CHA(self, p):
 		# Cursor character absolute
 		p = self.vt100_parse_params(p, [1])
- 		self.cursor_set_x(p[0] - 1)
+		self.cursor_set_x(p[0] - 1)
 	def csi_CUP(self, p):
 		# Set cursor position
 		p = self.vt100_parse_params(p, [1, 1])
@@ -1306,23 +1307,8 @@ class WebShellRequestHandler(BaseHTTPRequestHandler):
 		pass
 
 class SecureHTTPServer(HTTPServer):
- 	def __init__(self, server_address, HandlerClass, cmd=None, env_term=None, ssl_enabled=True, ssl_cert=None, www_dir='www'):
-  		BaseServer.__init__(self, server_address, HandlerClass)
-		# Setup SSL
-		if ssl_enabled:
-			try:
-				ctx = SSL.Context(SSL.SSLv23_METHOD)
-#				ctx.set_options(SSL.OP_NO_SSLv2)
-				ctx.use_privatekey_file(ssl_cert)
-				ctx.use_certificate_chain_file(ssl_cert)
-				# Demand a certificate
-#				ctx.set_verify(SSL.VERIFY_PEER|SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
-#					verify_cb)
-#				ctx.load_verify_locations(os.path.join(dir, 'CA.cert'))
-			except SSL.Error:
-				self.socket = None
-				return
-		# Setup webshell multiplex
+	def __init__(self, server_address, HandlerClass, cmd=None, env_term=None, ssl_enabled=True, ssl_cert=None, www_dir='www'):
+		BaseServer.__init__(self, server_address, HandlerClass)
 		self.webshell_files = {}
 		for i in ['css', 'html', 'js', 'gif', 'jpg', 'png']:
 			for j in glob.glob(www_dir + '/*.%s' % i):
@@ -1332,7 +1318,7 @@ class SecureHTTPServer(HTTPServer):
 		# Open socket
 		self.socket = socket.socket(self.address_family, self.socket_type)
 		if ssl_enabled:
-			self.socket = SSL.Connection(ctx, self.socket)
+			self.socket = ssl.wrap_socket(self.socket, certfile = ssl_cert, server_side=True)
 		self.server_bind()
 		self.server_activate()
 	def stop(self):
@@ -1363,21 +1349,21 @@ def main():
 		help = "disable SSL, set listen interface to localhost")
 	parser.add_option("--ssl-cert", dest = "ssl_cert", default = "webshell.pem",
 		help = "set SSL certificate file (default: webshell.pem)")
- 	parser.add_option("--www-dir", dest = "www_dir", default = "www",
+	parser.add_option("--www-dir", dest = "www_dir", default = "www",
 		help = "set WebShell www path (default: www)")
 	(o, a) = parser.parse_args()
 	if o.version:
-		print 'WebShell ' + version
+		print('WebShell ' + version)
 		sys.exit(0)
 	# Parameter validation
 	try:
 		o.port = int(o.port)
 	except ValueError:
-		print 'Invalid parameters'
+		print('Invalid parameters')
 		sys.exit(0)
 	if (not openssl_installed) & o.ssl_enabled:
-		print 'The python SSL extensions seem to be not installed.'
-		print 'You can run WebShell without SSL encryption with the --ssl-disable command line switch.'
+		print('The python SSL extensions seem to be not installed.')
+		print('You can run WebShell without SSL encryption with the --ssl-disable command line switch.')
 		sys.exit(0)
 	if not o.ssl_enabled:
 		if len(o.interface) == 0:
@@ -1409,18 +1395,18 @@ def main():
 		server_address = (o.interface, o.port)
 		httpd = SecureHTTPServer(server_address, WebShellRequestHandler, o.cmd, o.term, o.ssl_enabled, o.ssl_cert, o.www_dir)
 		if httpd.socket is None:
-			print 'There is a problem with OpenSSL. Make sure the certificates\' path and content are correct.'
+			print('There is a problem with OpenSSL. Make sure the certificates\' path and content are correct.')
 			sys.exit(0)
 		sa = httpd.socket.getsockname()
 		if not o.daemon:
 			scheme = 'http'
 			if o.ssl_enabled:
 				scheme += 's'
-			print 'WebShell (%s) at %s, port %s' % (scheme, sa[0], sa[1])
+			print('WebShell (%s) at %s, port %s' % (scheme, sa[0], sa[1]))
 		httpd.serve_forever()
 	except KeyboardInterrupt:
 		httpd.stop()
-		print 'Stopped'
+		print('Stopped')
 
 if __name__ == '__main__':
 	main()
