@@ -49,7 +49,7 @@ span.bf { background-color: #ffffff; }		/* Negative bg */
 .olCtrl {
 display:none;
 position:absolute;
-top:0px;
+top:200px;
 }
 .olAlert {
 display:none;
@@ -120,17 +120,25 @@ background:url('cells.png') no-repeat top right;
 width:80px;
 background:url('cell.png') no-repeat top right;
 }
+.k3 {
+width:60px;
+background:url('cell.png') no-repeat top right;
+}
+.k3s {
+width:60px;
+background:url('cells.png') no-repeat top right;
+}
 .k6s {
 width:80px;
 background:url('cells.png') no-repeat top right;
 }
 .k2 {
-width:400px;
+width:360px;
 background:url('cell.png') no-repeat top right;
 }
 
 .t {
-width:399px;
+width:359px;
 margin:-4px 0 0 0;
 padding:4px 0 4px 0;
 background:#000;

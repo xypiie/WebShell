@@ -70,6 +70,26 @@ function sh(value) {
 	sk(value);
 	so(-1);
 }
+// send combos (e.g. tmux screen change)
+function macro() {
+	var i = 0;
+	for (i = 0; i < arguments.length; ++i) {
+		sk(arguments[i]);
+	}
+}
+// set text field to password field
+function set_pw() {
+	var ti=document.getElementById("t");
+	var pw=document.getElementById("pw");
+	if (ti.type == "text") {
+		ti.type = "password";
+		pw.className = "k k3s";
+	} else {
+		ti.type = "text";
+		pw.className = "k k3";
+	}
+	so(1);
+}
 // Set scroll
 function scroll() {
 	var div=document.getElementById("term");
@@ -154,7 +174,8 @@ function endMsgAnim () {
 <form class="k k2" name="textform" onsubmit="st();return false;">
 <input type="text" id="t" class="t" name="textinput" />
 </form>
-<div class="k k6" onclick="sh(13)">Send</div>
+<div class="k k3" id="pw" onclick="set_pw()">PW</div>
+<div class="k k3" onclick="sh(13)">Send</div>
 </div>
 <div class="kd">
 <div class="k k6s" onclick="so(1)">Text</div>
@@ -478,20 +499,20 @@ function endMsgAnim () {
 <div class="k k0" onclick="sk(29)">^]</div>
 <div class="k k0" onclick="sk(30)">^^</div>
 <div class="k k0" onclick="sk(31)">^_</div>
-<div class="k k0"></div>
-<div class="k k0"></div>
-<div class="k k0"></div>
-<div class="k k0"></div>
-<div class="k k0"></div>
+<div class="k k0" onclick="sk(63236)">F1</div>
+<div class="k k0" onclick="sk(63237)">F2</div>
+<div class="k k0" onclick="sk(63238)">F3</div>
+<div class="k k0" onclick="sk(63239)">F4</div>
+<div class="k k0" onclick="sk(63240)">F5</div>
 </div>
 <div class="kd">
-<div class="k k0"></div>
-<div class="k k0"></div>
-<div class="k k0"></div>
-<div class="k k0"></div>
-<div class="k k0"></div>
-<div class="k k0"></div>
-<div class="k k0"></div>
+<div class="k k0" onclick="sk(63241)">F6</div>
+<div class="k k0" onclick="sk(63242)">F7</div>
+<div class="k k0" onclick="sk(63243)">F8</div>
+<div class="k k0" onclick="sk(63244)">F9</div>
+<div class="k k0" onclick="sk(63245)">F10</div>
+<div class="k k0" onclick="sk(63246)">F11</div>
+<div class="k k0" onclick="sk(63247)">F12</div>
 <div class="k k0"></div>
 <div class="k k0"></div>
 <div class="k k0" onclick="sk(13)"><img src="enter.png" alt="en"></div>
@@ -527,20 +548,20 @@ function endMsgAnim () {
 </div>
 <div class="kd"></div>
 <div class="kd">
-<div class="k k6" onclick="sk(63236)">F1</div>
-<div class="k k6" onclick="sk(63237)">F2</div>
-<div class="k k6" onclick="sk(63238)">F3</div>
-<div class="k k6" onclick="sk(63239)">F4</div>
-<div class="k k6" onclick="sk(63240)">F5</div>
-<div class="k k6" onclick="sk(63241)">F6</div>
+<div class="k k6" onclick="sk(4)">^d</div>
+<div class="k k6" onclick="macro(1, 100)">^A-d</div>
+<div class="k k6" onclick="macro(1, 97)">^A-a</div>
+<div class="k k6" onclick="macro(1, 99)">^A-c</div>
+<div class="k k6" onclick="macro(1, 32)">^A-sp</div>
+<div class="k k6" onclick="macro(1, 127)">^A-bsp</div>
 </div>
 <div class="kd">
-<div class="k k6" onclick="sk(63242)">F7</div>
-<div class="k k6" onclick="sk(63243)">F8</div>
+<div class="k k6" onclick="sk(63242)">F5</div>
+<div class="k k6" onclick="sk(63243)">F6</div>
 <div class="k k6" onclick="sk(63244)">F9</div>
 <div class="k k6" onclick="sk(63245)">F10</div>
 <div class="k k6" onclick="sk(63246)">F11</div>
-<div class="k k6" onclick="sk(63247)">F12</div>
+<div class="k k6" onclick="sk(355)">^A-c</div>
 </div>
 <div class="kd">
 <div class="k k6" onclick="so(1)">Text</div>
